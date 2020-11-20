@@ -52,6 +52,8 @@ services:
                 "
         volumes: 
             - content-store:/usr/local/tomcat/alf_data
+        ports: 
+            - 8081:8080
 
     alfresco-node2:
         image: alfresco/alfresco-content-repository:6.2.2
@@ -96,7 +98,9 @@ services:
             - content-store:/usr/local/tomcat/alf_data
         depends_on: 
             - alfresco
-
+        ports: 
+            - 8082:8080
+            
     transform-router:
         mem_limit: 512m
         image: quay.io/alfresco/alfresco-transform-router:1.2.0

@@ -2,7 +2,34 @@
 
 This is an example of how to setup a cluster using Alfresco Content Services Docker-Compose deployment.
 
-This builds on the [official documentaion](https://docs.alfresco.com/6.2/concepts/ha-intro.html).
+This builds on the [official documentation](https://docs.alfresco.com/6.2/concepts/ha-intro.html).
+
+**This is not a production ready deployment and serves only as an example**
+
+## Usage
+
+You will need Docker and Docker-compose setup and functioning beforehand.
+
+1. Clone this Github repository
+2. Run `docker-compose up -d`
+
+You can now access the following clustered resources
+
+Node Type | URL
+--- | ---
+Repository Node 1 | http://localhost:8081/alfresco
+Repository Node 2 | http://localhost:8082/alfresco
+Share Node 1 | http://localhost:9091/share
+Share Node 2 | http://localhost:9092/share
+Solr Node 1 | http://localhost:8083/solr
+Solr Node 2 | http://localhost:8084/solr
+
+To stop the service and remove it's volumes run `docker-compose down -v`
+
+**Do note that the nginx proxy is not modified to use the cluster and access via port 8080 will default to node 1 for Repository and Share access.**
+
+
+# How this works
 
 There are three components that are setup in this example cluster:
 
@@ -10,9 +37,7 @@ There are three components that are setup in this example cluster:
 2. [Share](#Share-Cluster-Setup)
 3. [Solr](#Solr-Cluster-Setup)
 
-We cover each of these in turn below:
-
-**This is not a production ready deployment and serves only as an example**
+We cover each of these in turn below.
 
 ## Repository Cluster Setup
 
@@ -25,7 +50,7 @@ The minimum requirements for clustering are the following:
 
 ### Database needs to be shared
 
-Alfresco's docker-compose configuration runs the database as a service called posgres. The db service configuration parameters can be shared with other nodes in the cluster which keeps things simple.
+Alfresco's docker-compose configuration runs the database as a service called postgres. The db service configuration parameters can be shared with other nodes in the cluster which keeps things simple.
 
 ### Content Store directory needs to be shared
 
@@ -34,7 +59,7 @@ By default, in a docker-compose configuration, the Content Store (the location w
 The process to create this shared Content Store location is:
 
 1. Declare a volume in your docker-compose.yml
-    ```ymal
+    ```yaml
     volumes:
         shared-file-store-volume:
             driver_opts:
@@ -69,6 +94,13 @@ The official Alfresco recommendation is to start cluster nodes in a rolling star
 ```
 
 This gives the alfresco_node2 service just enough of a pause to allow the alfresco service to connect to the database and begin creating the schema.
+
+To be able to access the cluster nodes, we will expose 8080 from these containers (alfresco on 8081 and alfresco-node2 on 8082). This is done by adding:
+
+```yaml
+    ports: 
+        - 8081:8080
+```
 
 ## Share Cluster Setup
 
@@ -111,17 +143,21 @@ There are a multitude of methods to creating clusters in solr. As with Share clu
                 -Dsolr.host=solr6-node2
 ```
 
-Summary
+# Caveats
 
 With the above we have a really basic cluster configuration. There are some additional pieces that can be added here:
 
+**Cluster Share**
+
+This can be achieved and simply requires building as custom Share container which contains the correct Hazelcast configuration.
+
 **Load balancers for clients**
 
-This would split the load between the "front end" Share containers and ensure if one of them fails, the requests are correctly routed
+This would split the load between the "front end" Share containers and ensure if one of them fails, the requests are correctly routed.
 	
 **Load balancers for the Repository**
 
-These would allow some reliance if a Repository container was downed or lost. This would require adjusting the configuration so the load balancer is used rather than a hardwire between tiers
+These would allow some reliance if a Repository container was downed or lost. This would require adjusting the configuration so the load balancer is used rather than a hardwire between tiers.
 
 **Load balancer for SOLR search requests**
 
