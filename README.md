@@ -11,7 +11,9 @@ This builds on the [official documentation](https://docs.alfresco.com/6.2/concep
 You will need Docker and Docker-compose setup and functioning beforehand.
 
 1. Clone this Github repository
-`git clone https://github.com/sirReeall/acs-docker-cluster.git`
+
+   `git clone https://github.com/sirReeall/acs-docker-cluster.git`
+
 2. Run `docker-compose up -d`
 
 You can now access the following clustered resources
