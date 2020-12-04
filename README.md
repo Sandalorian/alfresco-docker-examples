@@ -14,7 +14,8 @@ You will need Docker and Docker-compose setup and functioning beforehand.
 
    `git clone https://github.com/sirReeall/acs-docker-cluster.git`
 
-2. Run `docker-compose up -d`
+2. Switch into the base directory `cd acs-docker-cluster`
+3. Run `docker-compose up --build -d`
 
 You can now access the following clustered resources
 
@@ -110,9 +111,16 @@ To be able to access the cluster nodes, we will expose 8080 from these container
 
 ## Share Cluster Setup
 
-It is possible to configure Share as a cluster of nodes, this isn't strictly required. In the docker world you would need to create a custom share container which contains the required configuration inside a custom-slingshot-application-context.xml file. 
+It is possible to configure Share as a cluster of nodes within docker-compose, this isn't strictly required. In the docker world you need to create a custom share container which contains the required configuration inside a custom-slingshot-application-context.xml file. We achieve this in docker-compose by using the build directive:
 
-For the purpose of this demo, we will just add another Share container and hardwire the Share containers to their respective Alfresco containers. To do this within docker-compose.yml:
+```yaml
+        build: 
+            context: share
+            args: 
+                - SHARE_VERSION=${SHARE_VERSION}
+```
+
+For the purpose of this demo, we will add another Share container and hardwire the Share containers to their respective Alfresco containers. To do this within docker-compose.yml:
 1. Add a ports section to share service as follows:
 ```yaml
         ports:
@@ -152,10 +160,6 @@ There are a multitude of methods to creating clusters in solr. As with Share clu
 # Caveats
 
 With the above we have a really basic cluster configuration. There are some additional pieces that can be added here:
-
-**Cluster Share**
-
-This can be achieved and simply requires building as custom Share container which contains the correct Hazelcast configuration.
 
 **Load balancers for clients**
 

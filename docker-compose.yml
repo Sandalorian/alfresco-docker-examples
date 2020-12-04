@@ -141,7 +141,11 @@ services:
             - shared-file-store-volume:/tmp/Alfresco/sfs
 
     share:
-        image: "alfresco/alfresco-share:${SHARE_VERSION}"
+        build: 
+            context: share
+            args: 
+                - SHARE_VERSION=${SHARE_VERSION}
+        image: "${USER}/alfresco-share:${SHARE_VERSION}"
         mem_limit: 1g
         environment:
             REPO_HOST: "alfresco"
@@ -158,6 +162,10 @@ services:
             - 9091:8080
 
     share-node2:
+        build: 
+            context: share
+            args: 
+                - SHARE_VERSION=${SHARE_VERSION}
         image: "alfresco/alfresco-share:${SHARE_VERSION}"
         mem_limit: 1g
         environment:
