@@ -31,6 +31,9 @@ To stop the service and remove it's volumes run `docker-compose down -v`
 
 **Do note that the nginx proxy is not modified to use the cluster and access via port 8080 will default to node 1 for Repository and Share access.**
 
+### Changing Versions
+
+You can change the versions of Alfresco-Content-Repository, Alfresco-Share and Alfresco-Search-Services using the .env file in the root of this Github repo.
 
 # How this works
 
