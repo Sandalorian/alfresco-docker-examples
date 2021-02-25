@@ -52,7 +52,6 @@ services:
                 -Daudit.alfresco-access.enabled=true
                 "
         volumes: 
-            - ./repository/volumes/extension:/usr/local/tomcat/shared/classes/alfresco/extension
             - ./repository/tomcat/lib/mysql-connector-java-5.1.48.jar:/usr/local/tomcat/lib/mysql-connector-java-5.1.48.jar
 
     transform-router:
@@ -108,6 +107,8 @@ services:
                 -Dalfresco.context=alfresco
                 -Dalfresco.protocol=http
                 "
+        ports:
+            - 8082:8080
 
     mysql:
         image: mysql:5.7.32
@@ -117,6 +118,8 @@ services:
             - MYSQL_PASSWORD=alfresco
             - MYSQL_ROOT_PASSWORD=alfresco
         command: --default-authentication-plugin=mysql_native_password
+        ports:
+            - 3306:3306
 
 
     adminer:
@@ -171,24 +174,26 @@ services:
             - alfresco
             - share
 
-    # sync-service:
-    #     image: quay.io/alfresco/service-sync:3.3.3
-    #     mem_limit: 1g
-    #     environment:
-    #         JAVA_OPTS : "
-    #         -Dsql.db.driver=org.postgresql.Driver
-    #         -Dsql.db.url=jdbc:postgresql://postgres:5432/alfresco
-    #         -Dsql.db.username=alfresco
-    #         -Dsql.db.password=alfresco
-    #         -Dmessaging.broker.host=activemq
-    #         -Drepo.hostname=alfresco
-    #         -Drepo.port=8080
-    #         -Ddw.server.applicationConnectors[0].type=http
-    #         -Xms1000m -Xmx1000m
-    #         "
+    sync-service:
+        image: quay.io/alfresco/service-sync:3.3.3
+        mem_limit: 1g
+        environment:
+            JAVA_OPTS : "
+            -Dsql.db.driver=com.mysql.jdbc.Driver
+            -Dsql.db.url=\"jdbc:mysql://mysql:3306/alfresco?useUnicode=yes&characterEncoding=UTF-8&useSSL=false\"
+            -Dsql.db.username=alfresco
+            -Dsql.db.password=alfresco
+            -Dmessaging.broker.host=activemq
+            -Drepo.hostname=alfresco
+            -Drepo.port=8080
+            -Ddw.server.applicationConnectors[0].type=http
+            -Xms1000m -Xmx1000m
+            "
+        volumes: 
+        -  ./repository/tomcat/lib/mysql-connector-java-5.1.48.jar:/opt/alfresco-sync-service/connectors/mysql-connector-java-5.1.48.jar
 
-    #     ports:
-    #         - 9090:9090
+        ports:
+            - 9090:9090
 
 volumes:
     shared-file-store-volume:
