@@ -17,7 +17,7 @@ Make sure you have enough free memory to run this. We have an extra repository, 
    `git clone https://github.com/sirReeall/alfresco-docker-examples.git`
 
 2. Switch into the base directory `cd alfresco-docker-example/clustering`
-3. Run `docker-compose up --build -d`
+3. Run `docker-compose up -d`
 
 You can now access the following clustered resources
 
