@@ -10,11 +10,13 @@ This builds on the [official documentation](https://docs.alfresco.com/6.2/concep
 
 You will need Docker and Docker-compose setup and functioning beforehand.
 
+Make sure you have enough free memory to run this. We have an extra repository, share and solr service running. The total amount specified using memlint is around 15GB
+
 1. Clone this Github repository
 
-   `git clone https://github.com/sirReeall/acs-docker-cluster.git`
+   `git clone https://github.com/sirReeall/alfresco-docker-examples.git`
 
-2. Switch into the base directory `cd acs-docker-cluster`
+2. Switch into the base directory `cd alfresco-docker-example/clustering`
 3. Run `docker-compose up --build -d`
 
 You can now access the following clustered resources
@@ -34,7 +36,7 @@ To stop the service and remove it's volumes run `docker-compose down -v`
 
 ### Changing Versions
 
-You can change the versions of Alfresco-Content-Repository, Alfresco-Share and Alfresco-Search-Services using the .env file in the root of this Github repo.
+You can change the versions of Alfresco-Content-Repository, Alfresco-Share and Alfresco-Search-Services using the .env file.
 
 # How this works
 
