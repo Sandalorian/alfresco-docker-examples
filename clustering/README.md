@@ -4,7 +4,7 @@ This is an example of how to setup a cluster using Alfresco Content Services Doc
 
 This builds on the [official documentation](https://docs.alfresco.com/6.2/concepts/ha-intro.html).
 
-**This is not a production ready deployment and serves only as an example**
+**This is not a production ready deployment and serves only as an example.** Please make sure you review the [Food for Thought](#Food-for-thought) below.
 
 ## Usage
 
@@ -159,7 +159,13 @@ There are a multitude of methods to creating clusters in solr. As with Share clu
                 -Dsolr.host=solr6-node2
 ```
 
-# Caveats
+# Food for thought
+
+## Docker best Practices
+
+The idea behind this repository is to quick be able to spin up a cluster with minimal steps. This does result in mounting configuration files into Docker containers rather then building custom Docker images. This isn't the worst practice, but you would want to make sure that you understand how volumes are being used before using this example anywhere else.
+
+## Cluster Configurations
 
 With the above we have a really basic cluster configuration. There are some additional pieces that can be added here:
 
