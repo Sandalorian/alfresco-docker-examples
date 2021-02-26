@@ -10,7 +10,7 @@ This builds on the [official documentation](https://docs.alfresco.com/6.2/concep
 
 You will need Docker and Docker-compose setup and functioning beforehand.
 
-Make sure you have enough free memory to run this. We have an extra repository, share and solr service running. The total amount specified using memlint is around 15GB
+Make sure you have enough free memory to run this. We have an extra repository, share and solr services running. The total amount specified using memlint is around 15GB
 
 1. Clone this Github repository
 
