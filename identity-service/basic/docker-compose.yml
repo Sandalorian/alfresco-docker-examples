@@ -46,14 +46,14 @@ services:
                 -Dtransform.misc.url=http://transform-core-aio:8090/
 
                 -Dcsrf.filter.enabled=false
-                -Ddsync.service.uris=http://acs1:9090/alfresco
+                -Ddsync.service.uris=http://${DOCKER_HOST_HOSTNAME}:9090/alfresco
                 -Xms1500m -Xmx1500m
 
                 -Dauthentication.chain=identity-service1:identity-service,alfrescoNtlm1:alfrescoNtlm
 
                 -Didentity-service.enable-basic-auth=true
                 -Didentity-service.authentication.validation.failure.silent=false
-                -Didentity-service.auth-server-url=http://acs1:8888/auth
+                -Didentity-service.auth-server-url=http://'${DOCKER_HOST_HOSTNAME}':8888/auth
                 -Didentity-service.realm=alfresco
                 -Didentity-service.resource=alfresco
                 "
@@ -207,7 +207,6 @@ services:
             DB_USER: keycloak
             DB_PASSWORD: keycloak
             KEYCLOAK_IMPORT: /tmp/alfresco-realm.json
-
             JAVA_OPTS: "-Djboss.socket.binding.port-offset=808 -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true"
         ports:
             - 8888:8888
