@@ -43,11 +43,12 @@ You can change the versions of Alfresco-Content-Repository, Alfresco-Share and A
 
 The best resource I've found for understanding how ACS + AIMS works in any details can be found [here](https://hub.alfresco.com/t5/alfresco-content-services-blog/deploying-alfresco-dbp-with-identity-service-using-docker/ba-p/299338). This Docker compose setup is actually based on this. 
 
-There are three main parts to making this work:
+These are the main parts to make this work:
 
 1. [Configuring additional databases](#Configuring-additional-databases)
 2. [Adding the AIMS container](#Adding-the-AIMS-container)
 3. [Configuring ACS to use AIMS](#Configuring-ACS-to-use-AIMS)
+4. [Configuring Share to use AIMS](#Configuring-Share-to-use-AIMS)
 
 ## Configuring additional databases
 
@@ -109,6 +110,17 @@ alfresco_1            | wait-for-it.sh: waiting for auth:8888 without a timeout
 alfresco_1            | wait-for-it.sh: auth:8888 is available after 49 seconds
 ```
 
+## Configuring Share to use AIMS
+
+Configuring Share with AIMS is as simple as setting some additional Java options. In this deployment we use the following settings take from the [official documentation](https://docs.alfresco.com/identity-service/latest/tutorial/sso/saml/#step-9-configure-alfresco-share-properties):
+
+```yaml
+-Daims.enabled=true
+-Daims.realm=alfresco
+-Daims.resource=alfresco
+-Daims.authServerUrl=http://'${DOCKER_HOST_HOSTNAME}':8888/auth
+-Daims.publicClient=true
+```
 
 # Food for thought
 

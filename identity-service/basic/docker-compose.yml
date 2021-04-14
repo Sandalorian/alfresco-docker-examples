@@ -116,6 +116,11 @@ services:
                 -Dalfresco.port=8080
                 -Dalfresco.context=alfresco
                 -Dalfresco.protocol=http
+                -Daims.enabled=true
+                -Daims.realm=alfresco
+                -Daims.resource=alfresco
+                -Daims.authServerUrl=http://'${DOCKER_HOST_HOSTNAME}':8888/auth
+                -Daims.publicClient=true
                 "
         volumes: 
             - ./share/web-extension/custom-log4j.properties:/usr/local/tomcat/shared/classes/alfresco/web-extension/custom-log4j.properties
