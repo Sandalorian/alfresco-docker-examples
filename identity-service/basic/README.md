@@ -4,6 +4,8 @@ This is an example of how to setup a ACS with AMIS using [Alfresco Content Servi
 
 This builds on the [official documentation](https://docs.alfresco.com/identity-service/latest/tutorial/sso/saml/).
 
+This is a really basic example. You can only access Share and Digital workspace using the built in admin user. There is no ldap sync configure.
+
 **This is not a production ready deployment and serves only as an example.** Please make sure you review the [Food for Thought](#Food-for-thought) below.
 
 ## Usage
@@ -20,7 +22,7 @@ This does use Enterprise images that can only be accessed via quay.io credential
 
     On Linux:
 
-    `export $DOCKER_HOST_HOSTNAME=$HOSTNAME`
+    `export DOCKER_HOST_HOSTNAME=$HOSTNAME`
 
     On Windows:
 
@@ -124,7 +126,6 @@ Configuring Share with AIMS is as simple as setting some additional Java options
 
 # Food for thought
 
+There is only one client configured in AIMS, `alfresco`. In some instances you may want to separate Share, ADW, Repo/ DSync, in to different clients.
 
-
-
-
+You must specify the environment variable `DOCKER_HOST_HOSTNAME` otherwise this example will not work. This should also be the name of the host that is used to access any of the web applications.
