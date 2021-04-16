@@ -68,13 +68,32 @@ These are the main parts to make this work:
 
 ## Configuring additional databases
 
-Create multiple database using the following example:
+Postgres gives you a few options to create database on creation of your docker container. In this docker compose example, we have modified [docker-postgressql-multiple-databases's](https://github.com/mrts/docker-postgresql-multiple-databases) script to create a database, user and set permissions on multiple databases.
 
-https://github.com/mrts/docker-postgresql-multiple-databases
+The environment variables used by this script are:
+
+```yaml
+- POSTGRES_MULTIPLE_DATABASES=alfresco,keycloak
+```
+
+Which creates an alfresco user and database, and a keycloak user and database.
+
 
 ## Adding and configuring the AIMS container
 
-TODO: database configuration details
+For AIMS to work, this must point to a database. As AIMS is based on Keycloak we can take advantage of the environment variables listed on Keycloaks docker hub page. These are the settings we configure in our docker-compose.yml file:
+
+```yaml
+KEYCLOAK_USER: admin
+KEYCLOAK_PASSWORD: admin
+DB_VENDOR: postgres
+DB_ADDR: "postgres:5432"
+DB_DATABASE: keycloak
+DB_USER: keycloak
+DB_PASSWORD: keycloak
+KEYCLOAK_IMPORT: /tmp/alfresco-realm.json
+JAVA_OPTS: "-Djboss.socket.binding.port-offset=808 -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true"
+```
 
 ### Adding an alfresco realm
 

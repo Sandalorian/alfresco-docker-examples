@@ -66,7 +66,7 @@ services:
 
     transform-router:
         mem_limit: 512m
-        image: quay.io/alfresco/alfresco-transform-router:1.3.0
+        image: "quay.io/alfresco/alfresco-transform-router:${TROUTER_VERSION}"
         environment:
           JAVA_OPTS: " -Xms256m -Xmx512m"
           ACTIVEMQ_URL: "nio://activemq:61616"
@@ -80,7 +80,7 @@ services:
           - activemq
 
     transform-core-aio:
-        image: alfresco/alfresco-transform-core-aio:2.3.1
+        image: "alfresco/alfresco-transform-core-aio:${TCORE_AIO_VERSION}"
         mem_limit: 1536m
         environment:
             JAVA_OPTS: " -Xms256m -Xmx1536m"
@@ -92,7 +92,7 @@ services:
         - activemq
 
     shared-file-store:
-        image: alfresco/alfresco-shared-file-store:0.8.0
+        image: "alfresco/alfresco-shared-file-store:${SFS_VERSION}"
         mem_limit: 512m
         environment:
             JAVA_OPTS: " -Xms256m -Xmx512m"
@@ -126,7 +126,7 @@ services:
             - ./share/web-extension/custom-log4j.properties:/usr/local/tomcat/shared/classes/alfresco/web-extension/custom-log4j.properties
 
     postgres:
-        image: postgres:11.4
+        image: "postgres:${POSTGRES_VERSION}"
         mem_limit: 512m
         environment:
             - POSTGRES_MULTIPLE_DATABASES=alfresco,keycloak
@@ -156,7 +156,7 @@ services:
             - 8083:8983 #Browser port
 
     activemq:
-        image: alfresco/alfresco-activemq:5.15.8
+        image: "alfresco/alfresco-activemq:${ACTIVEMQ_VERSION}"
         mem_limit: 1g
         ports:
             - 8161:8161 # Web Console
@@ -165,7 +165,7 @@ services:
             - 61613:61613 # STOMP
 
     digital-workspace:
-        image: quay.io/alfresco/alfresco-digital-workspace:1.6.0
+        image: "quay.io/alfresco/alfresco-digital-workspace:${ADW_VERSION}"
         mem_limit: 128m
         environment:
             BASE_PATH: ./
@@ -179,7 +179,7 @@ services:
             APP_CONFIG_OAUTH2_REDIRECT_LOGOUT: /workspace/logout
 
     proxy:
-        image: alfresco/alfresco-acs-nginx:3.0.1
+        image: "alfresco/alfresco-acs-nginx:${ALF_NGINX_VERSION}"
         mem_limit: 128m
         depends_on:
             - alfresco
@@ -192,7 +192,7 @@ services:
             - share
 
     sync-service:
-        image: quay.io/alfresco/service-sync:3.3.3
+        image: "quay.io/alfresco/service-sync:${SYNC_VERSION}"
         mem_limit: 1g
         environment:
             JAVA_OPTS : "
@@ -210,7 +210,7 @@ services:
             - 9090:9090
 
     auth:
-        image: quay.io/alfresco/alfresco-identity-service:1.3
+        image: "quay.io/alfresco/alfresco-identity-service:${AIMS_VERSION}"
         environment:
             KEYCLOAK_USER: admin
             KEYCLOAK_PASSWORD: admin
