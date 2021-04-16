@@ -169,6 +169,14 @@ services:
         mem_limit: 128m
         environment:
             BASE_PATH: ./
+            APP_CONFIG_AUTH_TYPE: OAUTH
+            APP_CONFIG_OAUTH2_HOST: http://${DOCKER_HOST_HOSTNAME}:8888/auth/realms/alfresco 
+            APP_CONFIG_OAUTH2_CLIENTID: alfresco
+            APP_CONFIG_OAUTH2_IMPLICIT_FLOW: 'true'
+            APP_CONFIG_OAUTH2_SILENT_LOGIN: 'true'
+            APP_CONFIG_OAUTH2_REDIRECT_SILENT_IFRAME_URI: http://${DOCKER_HOST_HOSTNAME}:8080/workspace/assets/silent-refresh.html
+            APP_CONFIG_OAUTH2_REDIRECT_LOGIN: /workspace/
+            APP_CONFIG_OAUTH2_REDIRECT_LOGOUT: /workspace/logout
 
     proxy:
         image: alfresco/alfresco-acs-nginx:3.0.1

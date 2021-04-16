@@ -33,7 +33,20 @@ This does use Enterprise images that can only be accessed via quay.io credential
 1. Switch into the base directory `cd alfresco-docker-example/identity-service/basic`
 1. Run `docker-compose up -d`
 
-You can now access resources on the usual URLs
+You can now access resources on the usual URLs. There is only one account configured:
+
+Username | Password 
+--- | --- 
+admin | admin
+
+Both Share and ADW are configured to redirect directly to AIMS.
+
+`http://<<Your docker host hostname>>:8080/share `
+`http://<<Your docker host hostname>>:8080/workspace`
+
+You can also access AIMS on the following url:
+
+`http://<<Your docker host hame>>:8888/`
 
 To stop the service and remove it's volumes run `docker-compose down -v`
 
@@ -51,6 +64,7 @@ These are the main parts to make this work:
 2. [Adding the AIMS container](#Adding-the-AIMS-container)
 3. [Configuring ACS to use AIMS](#Configuring-ACS-to-use-AIMS)
 4. [Configuring Share to use AIMS](#Configuring-Share-to-use-AIMS)
+5. [Configuring ADW to use AIMS](#Configuring-ADW-to-use-AIMS)
 
 ## Configuring additional databases
 
@@ -73,7 +87,7 @@ This file is mounted using the follow Docker volume:
 
 ```yaml
 volumes: 
-    - ./identity/alfresco-realm.json:/tmp/alfresco-realm.json
+- ./identity/alfresco-realm.json:/tmp/alfresco-realm.json
 ```
 
 ## Configuring ACS to use AIMS
@@ -97,12 +111,12 @@ Added the repository properties to allow authentication to Alfresco Identity Ser
 Docker depends_on does not wait for the dependent container's service to be up and available. This causes alfresco-content-repository container to fail because it will need to pull the well-known configuration from Identity Service. To get around this we will use [wait-for-it](https://github.com/vishnubob/wait-for-it) and override the image's command as follows:
 
 ```yaml
-        volumes: 
-            - ./repository/extension/custom-log4j.properties:/usr/local/tomcat/shared/classes/alfresco/extension/custom-log4j.properties
-            - ./repository/tomcat/wait-for-it.sh:/usr/local/tomcat/wait-for-it.sh
-        depends_on: 
-            - auth
-        command: ["./wait-for-it.sh", "auth:8888", "--timeout=0", "--strict", "--", "catalina.sh", "run", "-security"]
+volumes: 
+    - ./repository/extension/custom-log4j.properties:/usr/local/tomcat/shared/classes/alfresco/extension/custom-log4j.properties
+    - ./repository/tomcat/wait-for-it.sh:/usr/local/tomcat/wait-for-it.sh
+depends_on: 
+    - auth
+command: ["./wait-for-it.sh", "auth:8888", "--timeout=0", "--strict", "--", "catalina.sh", "run", "-security"]
 ```
 
 You will see the alfresco container waiting for the auth container to become available. The log traces will look like the following
@@ -124,8 +138,25 @@ Configuring Share with AIMS is as simple as setting some additional Java options
 -Daims.publicClient=true
 ```
 
+## Configuring ADW to use AIMS
+
+Configuring ADW to use AIMS is well documented [here](https://docs.alfresco.com/identity-service/latest/tutorial/sso/saml/#step-8-configure-alfresco-digital-workspace). We apply the specified environment variables into our docker service for ADW:
+
+```yaml
+APP_CONFIG_AUTH_TYPE: OAUTH
+APP_CONFIG_OAUTH2_HOST: http://${DOCKER_HOST_HOSTNAME}:8888/auth/realms/alfresco 
+APP_CONFIG_OAUTH2_CLIENTID: alfresco
+APP_CONFIG_OAUTH2_IMPLICIT_FLOW: 'true'
+APP_CONFIG_OAUTH2_SILENT_LOGIN: 'true'
+APP_CONFIG_OAUTH2_REDIRECT_SILENT_IFRAME_URI: http://${DOCKER_HOST_HOSTNAME}:8080/workspace/assets/silent-refresh.html
+APP_CONFIG_OAUTH2_REDIRECT_LOGIN: /workspace/
+APP_CONFIG_OAUTH2_REDIRECT_LOGOUT: /workspace/logout
+```
+
 # Food for thought
 
 There is only one client configured in AIMS, `alfresco`. In some instances you may want to separate Share, ADW, Repo/ DSync, in to different clients.
 
 You must specify the environment variable `DOCKER_HOST_HOSTNAME` otherwise this example will not work. This should also be the name of the host that is used to access any of the web applications.
+
+There have been instances where the repository image will not be able to correctly resolve DOCKER_HOST_HOSTNAME, in this case it is likely that the docker host's /etc/resolv.conf is miss configured. You will need to correct this, typically a reboot will do, and then bring up the service again. 
