@@ -16,7 +16,7 @@ You will need Docker and Docker-compose setup and functioning beforehand.
 
    `git clone https://github.com/sirReeall/alfresco-docker-examples.git`
 
-2. Switch into the base directory `cd alfresco-docker-example/content-modeling`
+2. Switch into the base directory `cd alfresco-docker-examples/content-modeling`
 3. Run `docker-compose up -d`
 
 You can now access the ACS resources as on the usual URLs.

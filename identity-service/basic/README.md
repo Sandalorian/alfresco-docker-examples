@@ -30,7 +30,7 @@ This does use Enterprise images that can only be accessed via quay.io credential
 
     `setx DOCKER_HOST_HOSTNAME %COMPUTERNAME%`
 
-1. Switch into the base directory `cd alfresco-docker-example/identity-service/basic`
+1. Switch into the base directory `cd alfresco-docker-examples/identity-service/basic`
 1. Run `docker-compose up -d`
 
 You can now access resources on the usual URLs. There is only one account configured:
@@ -178,4 +178,4 @@ There is only one client configured in AIMS, `alfresco`. In some instances you m
 
 You must specify the environment variable `DOCKER_HOST_HOSTNAME` otherwise this example will not work. This should also be the name of the host that is used to access any of the web applications.
 
-There have been instances where the repository image will not be able to correctly resolve DOCKER_HOST_HOSTNAME, in this case it is likely that the docker host's /etc/resolv.conf is miss configured. You will need to correct this, typically a reboot will do, and then bring up the service again. 
+There have been instances where the repository container will not be able to correctly resolve DOCKER_HOST_HOSTNAME, in this case it is likely that the docker host's /etc/resolv.conf is miss configured. You will need to correct this, typically a reboot will do, and then bring up the service again. 

@@ -14,7 +14,7 @@ You will need Docker and Docker-compose setup and functioning beforehand.
 
    `git clone https://github.com/sirReeall/alfresco-docker-examples.git`
 
-1. Switch into the base directory `cd alfresco-docker-example/logging`
+1. Switch into the base directory `cd alfresco-docker-examples/logging`
 1. Edit `repository/extension/custom-log4j.properties` and `share/web-extension/custom-log4j.properties` with the debug classes you need enabled.
 1. Run `docker-compose up -d`
 
