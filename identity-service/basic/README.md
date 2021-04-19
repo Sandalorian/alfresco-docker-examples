@@ -18,17 +18,17 @@ This does use Enterprise images that can only be accessed via quay.io credential
 
     `git clone https://github.com/sirReeall/alfresco-docker-examples.git`
 
-1. Export the Docker host machines hostname to an environment variable name DOCKER_HOST_HOSTNAME. For example:
+1. Export the Docker host machines hostname to an environment variable name DOCKER_HOST_HOSTNAME. **If your hostname contains upper case characters, you will need to manually set these all to lower case**
+
+    Here are two example commands that you can use (others are available too):
 
     On Linux:
 
     `export DOCKER_HOST_HOSTNAME=$HOSTNAME`
 
-    On Windows:
+    On Windows (may require you to close and reopen command prompt after running):
 
     `setx DOCKER_HOST_HOSTNAME %COMPUTERNAME%`
-
-    Then close and reopen your command prompt window.
 
 1. Switch into the base directory `cd alfresco-docker-example/identity-service/basic`
 1. Run `docker-compose up -d`
